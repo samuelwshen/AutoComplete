@@ -77,6 +77,10 @@ public class TrieNode {
         return false;
     }
 
+    public boolean leadsTo(TrieNode target){
+        return(leadsTo(target.getValue()));
+    }
+
     //two TrieNodes equal if their values are the same
     public boolean equals(Object other){
         if(other.getClass().equals(this.getClass())){
@@ -87,7 +91,7 @@ public class TrieNode {
 
     //gets child with @target as value
     //returns null if no child of that target exists
-    private TrieNode getChild(char target){
+    public TrieNode getChild(char target){
         if (this.leadsTo(target)){
             for(TrieNode temp: children){
                 if(temp.isValue(target)){
@@ -96,6 +100,10 @@ public class TrieNode {
             }
         }
         return null;
+    }
+
+    public TrieNode getChild(TrieNode target){
+        return(getChild(target.getValue()));
     }
 
 }
