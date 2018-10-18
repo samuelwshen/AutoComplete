@@ -31,11 +31,13 @@ public class Trie implements Iterable<String> {
     //add a word
     //return true if word is added, false if already present
     public boolean addWord(String word){
+        boolean shortWord = word.length() == 1;
         if(values.contains(word)){
             return false;
         }
         values.add(word);
-        TrieNode first_char = new TrieNode(word.charAt(0));
+        TrieNode first_char = new TrieNode(word.charAt(0), shortWord);
+
         try {
             word = word.substring(1);
         } catch (IndexOutOfBoundsException e){
@@ -50,7 +52,11 @@ public class Trie implements Iterable<String> {
         }
         while(word.length() > 0){
             char temp_char = word.charAt(0);
-            temp_node = temp_node.addChild(temp_char);
+            if(word.length() > 1) {
+                temp_node = temp_node.addChild(temp_char, false);
+            } else {
+                temp_node = temp_node.addChild(temp_char, true);
+            }
             try {
                 word = word.substring(1);
             } catch (IndexOutOfBoundsException e){
@@ -64,9 +70,8 @@ public class Trie implements Iterable<String> {
         ArrayList<String> completions = new ArrayList<>();
         String val = String.valueOf(start_node.getValue());
         //base case
-        if(start_node.getChildren().isEmpty()){
+        if(start_node.isEnd()){
             completions.add(val);
-            return completions;
         } else {
             for(TrieNode child_node: start_node.getChildren()) {
                 ArrayList<String> child_call = complete(child_node);
@@ -74,8 +79,8 @@ public class Trie implements Iterable<String> {
                     completions.add(val + child_completion);
                 }
             }
-            return completions;
         }
+        return completions;
     }
 
     public ArrayList<String> complete (String wordNub){
@@ -89,7 +94,7 @@ public class Trie implements Iterable<String> {
         ArrayList<String> endings = complete(temp);   //these are completions sans wordNub
         ArrayList<String> completions = new ArrayList<>();
         for(String post: endings){
-            completions.add(wordNub + post);
+            completions.add(wordNub + post.substring(1));   //substringed to cut repeated letter resultant from recursive call
         }
         return completions;
     }

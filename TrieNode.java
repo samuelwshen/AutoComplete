@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class TrieNode {
     private ArrayList<TrieNode> children;
     private char value;
+    private boolean end;
 
     //default constructor
     public TrieNode(){
@@ -15,8 +16,9 @@ public class TrieNode {
     * @new_val denotes the value of the TrieNode
     * sets @children to an empty arraylist
      */
-    public TrieNode(char new_val){
+    public TrieNode(char new_val, boolean isEnd){
         value = new_val;
+        end = isEnd;
         children = new ArrayList<>();
     }
 
@@ -49,8 +51,8 @@ public class TrieNode {
     }
 
     //adds child by value
-    public TrieNode addChild(char child_value){
-        return addChild(new TrieNode(child_value));
+    public TrieNode addChild(char child_value, boolean eend){
+        return addChild(new TrieNode(child_value, eend));
     }
 
     public boolean setValue(char new_val){
@@ -104,6 +106,10 @@ public class TrieNode {
 
     public TrieNode getChild(TrieNode target){
         return(getChild(target.getValue()));
+    }
+
+    public boolean isEnd(){
+        return end;
     }
 
 }
